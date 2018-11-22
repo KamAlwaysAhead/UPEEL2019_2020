@@ -1,0 +1,405 @@
+﻿@model UpExcise.Models.shopDetails
+
+
+
+<div>
+    @using (Html.BeginForm("Save", "AddShop", FormMethod.Post, new { id = "popupForm" }))
+    {
+        @Html.ValidationSummary(true)
+
+        if (Model != null && Convert.ToInt32(Model.ShopID) > 0)
+        {
+        <h2 style="font-size: 20px; text-align: center; color: #33b35a; margin-top: 5%;">Edit Shop Details</h2>
+        @Html.HiddenFor(a => a.ShopID)
+        <div class="form-group" style="text-align: center; color: #17a2b8; font-size: 17px; margin-top: 3%;">
+            <label style="font-size: medium; color: #393836;">जिला का नाम - </label>
+            @Html.DisplayFor(a => Model.DisttName)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label style="font-size: medium; color: #393836;">दुकान का प्रकार - </label>
+
+            @Html.DisplayFor(a => Model.ShopDescription)
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>तहसील - </label>
+                                @Html.DropDownListFor(a => a.TehsilCodeCensus, (IEnumerable<SelectListItem>)ViewBag.GetTehsilName, new { @id = "ddlGetTehsilName", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>थाना - </label>
+                                @Html.DropDownListFor(a => a.Tcode, (IEnumerable<SelectListItem>)ViewBag.GetThanaName, new { @id = "ddlGetThanaName", @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>सर्किल -</label>
+                                @Html.DropDownList("CircleType", new List<SelectListItem> { new SelectListItem { Text = "Circle - 1", Value = "C1" }, new SelectListItem { Text = "Circle - 2", Value = "C2" }, new SelectListItem { Text = "Circle - 3", Value = "C3" }, new SelectListItem { Text = "Circle - 4", Value = "C4" }, new SelectListItem { Text = "Circle - 5", Value = "C5" }, new SelectListItem { Text = "Circle - 6", Value = "C6" }, new SelectListItem { Text = "Circle - 7", Value = "C7" }, new SelectListItem { Text = "Circle - 8", Value = "C8" }, new SelectListItem { Text = "Circle - 9", Value = "C9" }, new SelectListItem { Text = "Circle - 10", Value = "C10" } }, "--SELECT--", new { @id = "ddlCircleType", @class = "form-control", @onchange = "setThis('ddlCircleType',this)" })
+                                @Html.HiddenFor(m => Model.CircleType, new { @id = "hdnCircle" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>सेक्टर -</label>
+                                @Html.DropDownList("SectorType", new List<SelectListItem> { new SelectListItem { Text = "Sector - 1", Value = "S1" }, new SelectListItem { Text = "Sector - 2", Value = "S2" }, new SelectListItem { Text = "Sector - 3", Value = "S3" }, new SelectListItem { Text = "Sector - 4", Value = "S4" }, new SelectListItem { Text = "Sector - 5", Value = "S5" }, new SelectListItem { Text = "Sector - 6", Value = "S6" }, new SelectListItem { Text = "Sector - 7", Value = "S7" }, new SelectListItem { Text = "Sector - 8", Value = "S8" }, new SelectListItem { Text = "Sector - 9", Value = "S9" }, new SelectListItem { Text = "Sector - 10", Value = "S10" } }, "--SELECT--", new { @id = "ddlSectorType", @class = "form-control", @onchange = "setThis('ddlSectorType',this)" })
+                                @Html.HiddenFor(m => Model.SectorType, new { @id = "hdnSector" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>एरिया -</label>
+                                @Html.DropDownList("AreaType", new List<SelectListItem> { new SelectListItem { Text = "Nagar Nigam", Value = "N1" }, new SelectListItem { Text = "Nagar Palika", Value = "N2" }, new SelectListItem { Text = "Nagar Panchayat", Value = "N3" }, new SelectListItem { Text = "Village", Value = "N4" } }, "--SELECT--", new { @id = "ddlAreaType", @class = "form-control", @onchange = "setThis('ddlAreaType',this)" })
+                                @Html.HiddenFor(m => Model.AreaType, new { @id = "hdnArea" })
+
+                            </div>
+                        </div>
+                        @{
+            if (ViewBag.ShopTYPE == "CL")
+            {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MGQ (In Litre.) -</label>
+
+                                    @Html.TextBoxFor(m => Model.MGQ_Basic_Fees, new { @id = "txt_MGQ", @class = "form-control", @type = "number", @min = "0", @onkeyup = "saveValue(this,'txt_MGQ')", @oninput = "saveValue(this,'txt_MGQ')" })
+                                    @Html.ValidationMessageFor(m => m.MGQ_Basic_Fees)
+
+                                </div>
+                            </div>
+            }
+            else
+            {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Licence Fee (In Rs.) -</label>
+
+                                    @Html.TextBoxFor(m => Model.MGQ_Basic_Fees, new { @id = "txt_LicenseFee", @class = "form-control", @type = "number", @min = "0", @onkeyup = "saveValue(this,'txt_LicenseFee')", @oninput = "saveValue(this,'txt_LicenseFee')" })
+                                    @Html.ValidationMessageFor(m => m.MGQ_Basic_Fees)
+
+                                </div>
+                            </div>
+            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        }
+        else
+        {
+        <h2 style="font-size: 20px; text-align: center; color: #33b35a; margin-top: 5%">Save Shop Details</h2>
+        <div class="form-group" style="text-align: center; color: #17a2b8; font-size: 17px; margin-top: 3%;">
+            <label style="font-size: medium; color: #393836;">जिला का नाम - </label>
+
+
+            @ViewBag.distName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label style="font-size: medium; color: #393836;">दुकान का प्रकार - </label>
+
+            @ViewBag.shopName
+        </div>
+
+
+
+
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>तहसील - </label>
+                                @Html.DropDownListFor(m => m.TehsilCodeCensus, (IEnumerable<SelectListItem>)ViewBag.GetTehsilName, new { @id = "ddlGetTehsilName", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>थाना - </label>
+                                @Html.DropDownListFor(m => m.Tcode, (IEnumerable<SelectListItem>)ViewBag.GetThanaName, new { @id = "ddlGetThanaName", @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>सर्किल -</label>
+                                @Html.DropDownList("CircleType", new List<SelectListItem> { new SelectListItem { Text = "Circle - 1", Value = "C1" }, new SelectListItem { Text = "Circle - 2", Value = "C2" }, new SelectListItem { Text = "Circle - 3", Value = "C3" }, new SelectListItem { Text = "Circle - 4", Value = "C4" }, new SelectListItem { Text = "Circle - 5", Value = "C5" }, new SelectListItem { Text = "Circle - 6", Value = "C6" }, new SelectListItem { Text = "Circle - 7", Value = "C7" }, new SelectListItem { Text = "Circle - 8", Value = "C8" }, new SelectListItem { Text = "Circle - 9", Value = "C9" }, new SelectListItem { Text = "Circle - 10", Value = "C10" } }, "--SELECT--", new { @id = "ddlCircleType", @class = "form-control", @onchange = "setThis('ddlCircleType',this)" })
+                                @Html.HiddenFor(m => Model.CircleType, new { @id = "hdnCircle" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>सेक्टर -</label>
+                                @Html.DropDownList("SectorType", new List<SelectListItem> { new SelectListItem { Text = "Sector - 1", Value = "S1" }, new SelectListItem { Text = "Sector - 2", Value = "S2" }, new SelectListItem { Text = "Sector - 3", Value = "S3" }, new SelectListItem { Text = "Sector - 4", Value = "S4" }, new SelectListItem { Text = "Sector - 5", Value = "S5" }, new SelectListItem { Text = "Sector - 6", Value = "S6" }, new SelectListItem { Text = "Sector - 7", Value = "S7" }, new SelectListItem { Text = "Sector - 8", Value = "S8" }, new SelectListItem { Text = "Sector - 9", Value = "S9" }, new SelectListItem { Text = "Sector - 10", Value = "S10" } }, "--SELECT--", new { @id = "ddlSectorType", @class = "form-control", @onchange = "setThis('ddlSectorType',this)" })
+                                @Html.HiddenFor(m => Model.SectorType, new { @id = "hdnSector" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>एरिया -</label>
+                                @Html.DropDownList("AreaType", new List<SelectListItem> { new SelectListItem { Text = "Nagar Nigam", Value = "N1" }, new SelectListItem { Text = "Nagar Palika", Value = "N2" }, new SelectListItem { Text = "Nagar Panchayat", Value = "N3" }, new SelectListItem { Text = "Village", Value = "N4" } }, "--SELECT--", new { @id = "ddlAreaType", @class = "form-control", @onchange = "setThis('ddlAreaType',this)" })
+                                @Html.HiddenFor(m => Model.AreaType, new { @id = "hdnArea" })
+
+                            </div>
+                        </div>
+                        @{
+            if (ViewBag.ShopTYPE == "CL")
+            {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MGQ (In Litre.)-</label>
+
+                                    @Html.TextBoxFor(m => m.MGQ_Basic_Fees, "{0:0.00}", new { @id = "txt_MGQ", @class = "form-control", @type = "number", @min = "0", @onkeyup = "saveValue(this,'txt_MGQ')", @oninput = "saveValue(this,'txt_MGQ')" })
+                                    @Html.ValidationMessageFor(m => m.MGQ_Basic_Fees)
+
+
+
+                                </div>
+                            </div>
+            }
+            else
+            {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Licence Fee (In Rs.) -</label>
+
+                                    @Html.TextBoxFor(m => m.MGQ_Basic_Fees, "{0:0.00}", new { @id = "txt_LicenseFee", @class = "form-control", @type = "number", @min = "0", @onkeyup = "saveValue(this,'txt_LicenseFee')", @oninput = "saveValue(this,'txt_LicenseFee')" })
+                                    @Html.ValidationMessageFor(m => m.MGQ_Basic_Fees)
+
+                                </div>
+                            </div>
+            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        }
+
+
+
+
+
+        <div class="form-group">
+            <label style="font-size: 17px;">दुकान का नाम (हिन्दी)</label>
+            @Html.TextBoxFor(a => a.ShopNameH, new { @class = "form-control", @style = "font-size: 14px;", @id = "ShopNameHin" })
+            @Html.ValidationMessageFor(a => a.ShopNameH)
+            @*<a href="https://www.google.com/inputtools/windows/" target="_blank"> Click here to download software for hindi fonts.</a>*@
+        </div>
+        <div class="form-group">
+            <label style="font-size: 17px;">दुकान का नाम (अंग्रेजी)</label>
+            @Html.TextBoxFor(a => a.ShopNameE, new { @class = "form-control", @style = "font-size: 14px;text-transform: uppercase;", @id = "ShopNameEng" })
+            @Html.ValidationMessageFor(a => a.ShopNameE)
+        </div>
+
+        
+
+
+        <div class="form-group">
+            <div id="mGq1" style="display: none">
+                MGQ(Minimum Guaranteed Quota/न्यूनतम प्रत्याभूत मात्रा) - <span id="_mgq" style="font-weight: bold; color: red"></span>
+                <br />
+
+                BLF(Basic License Fees/बेसिक लाइसेंस फीस)-  <span id="_bcf" style="font-weight: bold; color: red"></span>
+                <br />
+            </div>
+            LF(License Fees/ लाइसेंस फीस) –  <span id="_lf" style="font-weight: bold; color: red"></span>
+            <br />
+            EM(Earnest Money/ धरोहर राशि) –  <span id="_em" style="font-weight: bold; color: red"></span>
+            <br />
+
+            S(Solvency /हैसियत प्रमाण पत्र की धनराशी) – <span id="_s" style="font-weight: bold; color: red"></span>
+            <br />
+
+
+
+        </div>
+
+
+
+
+        <div>
+            <center><input type="button"  value="सुरक्षित करे" onclick="showValidation(this)" class="save_btn btn btn-primary" /></center>
+        </div>
+   
+    }
+
+</div>
+
+<script type="text/javascript">
+
+    function showValidation(obj) {
+
+        if ($('#ddlGetTehsilName').val() == "0") {
+            swal("Please Select Tehsil.");
+            event.preventDefault();
+            return false;
+        }
+        if ($('#ddlGetThanaName').val() == "0") {
+            swal("Please Select Thana.");
+            event.preventDefault();
+            return false;
+        }
+
+        if ($('#ddlCircleType').val() == "" && $('#ddlSectorType').val() == "") {
+            swal("Please Select atleast one Circle/Sector.");
+            event.preventDefault();
+            return false;
+        }
+
+        //if ($('#ddlSectorType').val() == "") {
+        //    swal("Please Select Sector.");
+        //    event.preventDefault();
+        //    return false;
+        //}
+
+        if ($('#ddlAreaType').val() == "") {
+            swal("Please Select Area.");
+            event.preventDefault();
+            return false;
+        }
+
+
+        if ($('#txt_LicenseFee').val() == "" && $('#txt_MGQ').val() == undefined) {
+            swal("Please Enter the License Fee Amount.");
+            event.preventDefault();
+            return false;
+        }
+
+        if ($('#txt_MGQ').val() == "" && $('#txt_LicenseFee').val() == undefined) {
+            swal("Please Enter the MGQ Amount.");
+            event.preventDefault();
+            return false;
+        }
+
+        if ($('#ShopNameHin').val() == "") {
+            swal("Please fill the Hindi Name of Shop.");
+            event.preventDefault();
+            return false;
+        }
+
+
+        if ($('#ShopNameEng').val() == "") {
+            swal("Please fill the English Name of Shop.");
+            event.preventDefault();
+            return false;
+        }
+
+
+        if (!(window.confirm("सुरक्षित करने से पूर्व दुकान से सम्बंधित समस्त सूचनाओ की शुद्धता की जांच कर ली गयी है |"))) {
+            event.preventDefault();
+            return false;
+        }
+
+        //if()
+        //var regex = new RegExp("^[a-zA-Z0-9 ]+$");
+        //var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        //if (regex.test(str)) {
+        //    return true;
+        //}
+
+        //e.preventDefault();
+        //return false;
+
+
+    }
+
+
+    function setThis(option, obj) {
+        debugger
+        if ($(obj).val() != "") {
+            //if (option == "ddlCircleType") {
+            //    $('#hdnCircle').val($(obj).val());
+            //}
+            //else if (option == "ddlSectorType") {
+            //    $('#hdnSector').val($(obj).val());
+            //} else
+            if (option == "ddlAreaType") {
+                $('#hdnArea').val($(obj).val());
+            }
+        }
+        else {
+            swal("Please Select Area Type");
+        }
+    }
+
+
+    function saveValue(obj, option) {
+        debugger
+        $('#_mgq').html('');
+        $('#_bcf').html('');
+        $('#_lf').html('');
+        $('#_em').html('');
+        $('#_s').html('');
+        if (!isNaN($(obj).val()))
+            if (option == "txt_MGQ") {
+                $('#mGq1').css('display', 'block');
+                $('#_mgq').html($(obj).val());
+                $('#_bcf').html(parseFloat((parseFloat($(obj).val()) * 28)).toFixed(2));
+                $('#_lf').html(parseFloat((parseFloat($(obj).val()) * 222)).toFixed(2));
+                $('#_em').html(parseFloat(parseFloat($(obj).val()) * 2.8).toFixed(2));
+                $('#_s').html(parseFloat(((parseFloat($(obj).val()) * 28) + (parseFloat($(obj).val()) * 222)) / 6).toFixed(2));
+            }
+
+            else {
+                $('#mGq1').css('display', 'none');
+                $('#_lf').html(parseFloat($(obj).val()).toFixed(2));
+                $('#_em').html(parseFloat((parseFloat($(obj).val()) * 10) / 100).toFixed(2));
+                $('#_s').html(parseFloat($(obj).val()).toFixed(2));
+            }
+    }
+
+</script>

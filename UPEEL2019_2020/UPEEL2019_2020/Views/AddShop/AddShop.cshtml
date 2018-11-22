@@ -1,0 +1,404 @@
+﻿@model UpExcise.Models.shopDetails
+@{
+
+    Layout = "~/Views/Shared/DashMaster.cshtml";
+}
+
+
+
+
+
+
+
+
+<div class="page-wrapper">         
+
+    <div class="page-header">
+        <div class="page-header-title">
+            <h4>Shop Master</h4>
+            <span>Add/Delete/Update Shop Information</span>
+        </div>
+        <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title">
+                    <li class="breadcrumb-item">
+                        <a href="index.html">
+                            <i class="icofont icofont-home"></i>
+                        </a>
+                    </li>
+                   
+                    <li class="breadcrumb-item">
+                        <a href="#!">Shop Master</a>
+                    </li>
+                </ul>
+            </div>
+    </div>
+
+
+    <div class="page-body">
+
+        <div class="card">
+            <div class="card-header">
+                <h5>महत्वपूर्ण निर्देश</h5>
+                <span>जनपंद वार दुकान एवं आवंटि/सह-आवंटि सूची डाउनलोड कर मिलान करले की दर्शाया गया विवरण(नाम,आधार संख्या,पैन कार्ड संख्या ,मोबाइल एवं दुकान सम्बन्धी सूचना) सही है|त्रुटी होने पर Allottee बटन से आवंटि/सह-आवंटि का एवं Edit बटन से दुकान का विवरण संशोधित किया जा सकता है|</span>
+
+            </div>
+            <div class="card-block">
+                @*<div class="table-responsive dt-responsive">*@
+
+
+
+
+
+                <div class="row">
+                    @if (ViewBag.Dsc == "Done")
+                        {
+                        <script>
+
+                                alert("Shop Already finalized modification at this stage in not allowed. ");
+                                window.location = '../DashBoard/DistrictDashBoard'
+
+                        </script>
+                        }
+                    <div class="col-md-12">
+                        <div class="box">
+
+                            <div class="row">
+
+                                <div class="col-md-4" style="margin-left: 17%">
+                                    <div class="form-group">
+                                        <label>जिला - </label>
+                                        @Html.DropDownListFor(m => m.distCode, (IEnumerable<SelectListItem>)ViewBag.DisLst, new { @id = "ddlDist", @class = "form-control", @onchange = "setDistAndShoptype(this)", disabled = "disabled" })
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>दुकान का प्रकार -</label>
+                                        @Html.DropDownList("ShopType", new List<SelectListItem> { new SelectListItem { Text = "Beer Shop", Value = "BE" }, new SelectListItem { Text = "Country Liquor", Value = "CL" }, new SelectListItem { Text = "Foreign Liquor", Value = "FL" }, new SelectListItem { Text = "Model Shop", Value = "MS" } }, "--SELECT--", new { @id = "ddlShpType", @class = "form-control", @onchange = "setDistAndShoptype(this)" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div  class="tablecontainer">
+               
+                
+                        @*<a class="popup btn btn-primary" onclick="validatethis(this)" href="/AddShop/save/0" style="margin-bottom: 20px; margin-top: 20px; border-radius: 20px"><i class="icofont icofont-ui-add"></i>नयी दुकान जोड़े </a>*@
+
+                    <a class="btn btn-primary"  href="/AddShop/save/0" style="margin-bottom: 20px; margin-top: 20px; border-radius: 20px"><i class="icofont icofont-list"></i>दुकानवार आवंटि/सह-आवंटि सूची </a>
+                  
+                <table id="myDatatable" class="table table-striped table-bordered nowrap dataTable">
+                    <thead>
+                        <tr>
+                            <th>क्रम संख्या</th>
+                            <th>दुकान का नाम (अंग्रेजी)</th>
+                            <th>दुकान का नाम (हिन्दी)</th>
+                            @*<th>जिला का नाम</th>*@
+                            <th>तहसील का नाम </th>
+                            <th>थाना का नाम </th>
+                            <th>आवंटी</th>
+                            <th>संशोधन</th>
+                            <th>डिलीट</th>
+                           
+                        </tr>
+                    </thead>
+                </table>
+
+                </div>
+                <div class="row" id="CL_" style="display: none">
+
+                    <div class="col-md-12">
+                        <div class="box">
+
+                            <div class="row">
+                                <div class="col-md-8" style="margin-left: 16%">
+                                    <div class="form-group" style="background-color: white; padding: 8px">
+                                        <table style="width: 100%">
+                                            <tr>
+                                                <td><b style="color: red; font-size: x-large;">Note-</b></td>
+                                                <td></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="color: black; font-size: x-large;">(CL-Country Liquor Shop/ देशी मदिरा दुकान )हेतु-</td>
+                                                <td style="color: black; font-size: x-large;">Calculation Formula/गणना सूत्र</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td><span><b style="color: blue">1.</b></span>	MGQ(Minimum Guaranteed Quota/न्यूनतम ) In Litre.</td>
+                                                <td style="font-weight: 900; color: black;">--------------</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span><b style="color: blue">2.</b></span>	BLF(Basic License Fees/बेसिक लाइसेंस फीस) </td>
+                                                <td style="font-weight: 900; color: black;">MGQ *28</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span><b style="color: blue">3.</b></span>	LF(License Fees/ लाइसेंस फीस)  </td>
+                                                <td style="font-weight: 900; color: black;">MGQ *222</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span><b style="color: blue">4.</b></span>	EM(Earnest Money/ धरोहर राशि)   </td>
+                                                <td style="font-weight: 900; color: black;">MGQ *2.8</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span><b style="color: blue">5.</b></span>	S(Solvency /हैसियत प्रमाण पत्र की धनराशी) </td>
+                                                <td style="font-weight: 900; color: black;">(BLF + LF)/6</td>
+                                            </tr>
+
+
+
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+
+  
+
+    @*@System.Web.Optimization.Scripts.Render("~/bundles/Scripts")*@
+
+    <script>
+        window.onload = L;
+        function L() {
+            debugger
+            //var oTable = $('#myDatatable').DataTable({
+            //    "ajax": {
+            //        "url": '/AddShop/GetShops',
+            //        "type": "get",
+            //        "datatype": "json"
+            //    },
+            //    "columns": [
+            //        { "data": "RowNum", "autoWidth": true },
+            //        { "data": "ShopNameE", "autoWidth": true },
+            //        { "data": "ShopNameH", "autoWidth": true },
+            //        { "data": "DisttName", "autoWidth": true },
+            //         { "data": "TehsilNameEnglish", "autoWidth": true },
+            //        { "data": "tnameHindi", "autoWidth": true },
+            //        //{ "data": "City", "autoWidth": true },
+            //        //{ "data": "Country", "autoWidth": true },
+            //        {
+            //            "data": "ShopID", "width": "50px", "render": function (data) {
+            //                debugger
+            //                return '<a class="popup" href="/AddShop/save/' + data + '">Edit</a>';
+            //            }
+            //        },
+            //        {
+            //            "data": "ShopID", "width": "50px", "render": function (data) {
+            //                debugger
+            //                return '<a mode="del" style="cursor: pointer;color: red;font-size: initial" onclick = deleteThis(this,' + data + ')>Delete</a>';
+            //            }
+            //        }
+            //    ]
+            //})
+            $('.tablecontainer').on('click', 'a.popup', function (e) {
+                debugger
+
+                e.preventDefault();
+                OpenPopup($(this).attr('href'));
+            })
+            function OpenPopup(pageUrl) {
+                debugger
+                var $pageContent = $('<div/>');
+                $pageContent.load(pageUrl, function () {
+                    $('#popupForm', $pageContent).removeData('validator');
+                    $('#popupForm', $pageContent).removeData('unobtrusiveValidation');
+                    $.validator.unobtrusive.parse('form');
+
+                });
+
+                $dialog = $('<div class="popupWindow"  style="overflow:auto"></div>')
+                          .html($pageContent)
+                          .dialog({
+                              draggable: false,
+                              autoOpen: false,
+                              resizable: false,
+                              model: true,
+                              title: 'Shop Panel-',
+                              height: 800,
+                              width: 800,
+                              close: function () {
+                                  $dialog.dialog('destroy').remove();
+                              }
+                          })
+
+                $('.popupWindow').on('submit', '#popupForm', function (e) {
+                    debugger
+                    var url = $('#popupForm')[0].action;
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: $('#popupForm').serialize(),
+                        success: function (data) {
+                            if (data.status) {
+                                $dialog.dialog('close');
+                                oTable.ajax.reload();
+                                callThis();
+                            }
+                        }
+                    })
+
+                    e.preventDefault();
+                })
+
+                $dialog.dialog('open');
+            }
+        }
+
+
+        function callThis() {
+            debugger
+            $('#myDatatable').DataTable().destroy();
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/AddShop/GetShops',
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "RowNum", "autoWidth": true },
+                    { "data": "ShopNameE", "autoWidth": true },
+                    { "data": "ShopNameH", "autoWidth": true },
+                    //{ "data": "DisttName", "autoWidth": false },
+                    { "data": "TehsilNameEnglish", "autoWidth": true },
+                    { "data": "tnameHindi", "autoWidth": true },
+                    //{ "data": "City", "autoWidth": true },
+                    //{ "data": "Country", "autoWidth": true },
+                       {
+                           "data": "ShopID", "width": "50px", "render": function (data) {
+                               debugger
+                               return '<span class="pcoded-badge label label-primary"><a class="popup" style="color:#ffffff !important;" href="/AddShop/SaveApplicant/' + data + '">Allottee</a></span>';
+                            
+                           }
+                       },
+                    {
+                        "data": "ShopID", "width": "50px", "render": function (data) {
+                            debugger
+                            return '<span class="pcoded-badge label label-warning"><a class="popup" style="color:#ffffff !important;" href="/AddShop/save/' + data + '">Edit</a></span>';
+                        }
+                    }
+                    , //
+                    {
+                        "data": "ShopID", "width": "50px", "render": function (data) {
+                            debugger
+                            return '<span class="pcoded-badge label label-danger" ><a  mode="del" style="cursor: not-allowed ;disabled :disabled" onclick = deleteThis(this,' + data + ')>Delete</a></span>';
+                            
+                        }
+                    }
+             
+                ]
+            })
+
+        }
+
+        function setDistAndShoptype(obj) {
+            debugger
+
+
+            if ($("#ddlShpType").val() != "") {
+
+                if ($("#ddlShpType").val() == "CL") {
+                    $("#CL_").css('display', 'block');
+                    $("#ML_").css('display', 'none');
+                }
+                else {
+                    $("#ML_").css('display', 'block');
+                    $("#CL_").css('display', 'none');
+                }
+
+            }
+
+
+            $.ajax({
+                url: '/AddShop/setDistAndShoptype',
+                data: { 'distcode': $("#ddlDist").val(), "shopType": $("#ddlShpType").val(), 'distName': $("#ddlDist").find("option:selected").text(), "shopName": $("#ddlShpType").find("option:selected").text() },
+                datatype: "json",
+                type: "GET",
+                async: true,
+                success: function (data) {
+                    callThis();
+                },
+                error: function (data) {
+                    alert("Error in ModelShop Loading");
+                }
+
+            });
+
+
+            event.preventDefault();
+            return false;
+        }
+
+        function validatethis(obj) {
+            debugger
+            if ($("#ddlDist").val() == "-1" || $("#ddlShpType").val() == "") {
+                alert("Please Select the above Detail");
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        }
+
+
+        function deleteThis(obj, data) {
+            debugger
+
+
+            swal({
+                title: "Are you sure?",
+                text: "Are you sure you want to delete this shop",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: "No, Cancel!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+           function (isConfirm) {
+               if (isConfirm) {
+                   $.ajax({
+                       url: '/AddShop/delete',
+                       data: { 'id': data },
+                       datatype: "json",
+                       type: "GET",
+                       async: true,
+                       success: function (data) {
+                           swal("Shop Deleted Successfully.");
+                           callThis();
+                       },
+                       error: function (data) {
+                           swal("Shop Deletion is not allowed at this stage.");
+                       }
+
+                   });
+               } else {
+                   swal("Cancelled", "Your Shop is safe :)", "error");
+               }
+           });
+
+
+
+
+        }
+
+
+    </script>
+
+
+
+    </div>

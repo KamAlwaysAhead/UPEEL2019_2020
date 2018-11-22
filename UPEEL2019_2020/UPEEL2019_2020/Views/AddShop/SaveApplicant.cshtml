@@ -1,0 +1,223 @@
+﻿@model UpExcise.Models.BOShopWiseApplicant
+
+
+
+<div>
+        @using (Html.BeginForm("SaveApplicant", "AddShop", FormMethod.Post, new { id = "popupForm" }))
+        {
+            @Html.ValidationSummary(true)
+
+            if (Model != null && Convert.ToInt32(Model.Shopid) > 0)
+            {
+                <h2 style="font-size: 20px; text-align: center; color: #33b35a; margin-top: 5%;">Edit Shop Allotee Information</h2>
+                @Html.HiddenFor(a => a.Shopid)
+                <div class="form-group" style="text-align: center; color: #17a2b8; font-size: 17px; margin-top: 3%;">
+                    <label style="font-size: medium; color: #393836;">जिला का नाम - </label>
+                    @Html.DisplayFor(a => Model.DistrictName)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label style="font-size: medium; color: #393836;">दुकान का प्रकार - </label>
+                  
+                    @Html.DisplayFor(a => Model.Shoptype)  <br />
+                    <label style="font-size: medium; color: #393836;">दुकान का नाम- </label>
+
+                    @Html.DisplayFor(a => Model.ShopName)
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>आवंटि का नाम - </label>
+                                        @Html.TextBoxFor(m => Model.ApplicantName, new { @id = "txt_ApplicantName", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantName)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>आवंटि का आधार - </label>
+                                        @Html.TextBoxFor(m => Model.ApplicantAadhar, new { @id = "txt_ApplicantAadhar", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantAadhar)
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>आवंटि का पैन कार्ड संख्या - </label>
+                                        @Html.TextBoxFor(m => Model.ApplicantPAN, new { @id = "txt_ApplicantPAN", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantName)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>आवंटि का मोबाइल नंबर  - </label>
+                                        @Html.TextBoxFor(m => Model.ApplicantPAN, new { @id = "txt_ApplicantMobile", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantPAN)
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>सह-आवंटि का नाम - </label>
+                                        @Html.TextBoxFor(m => Model.CoApplicantName, new { @id = "txt_CoApplicantName", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantName)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>सह-आवंटि का आधार - </label>
+                                        @Html.TextBoxFor(m => Model.CoApplicantAadhar, new { @id = "txt_CoApplicantAadhar", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantAadhar)
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>सह-आवंटि का पैन कार्ड संख्या - </label>
+                                        @Html.TextBoxFor(m => Model.CoApplicantPAN, new { @id = "txt_CoApplicantPAN", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantName)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>सह-आवंटि का मोबाइल नंबर  - </label>
+                                        @Html.TextBoxFor(m => Model.CoApplicantPAN, new { @id = "txt_CoApplicantMobile", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ApplicantPAN)
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div>
+                    <center><input type="button" value="सुरक्षित करे" onclick="showValidation(this)" class="save_btn btn btn-primary" /></center>
+                </div>
+
+
+
+
+
+            }
+        }
+
+
+    </div>
+
+@*<script type="text/javascript">
+
+        function showValidation(obj) {
+
+            if ($('#ddlGetTehsilName').val() == "0") {
+                swal("Please Select Tehsil.");
+                event.preventDefault();
+                return false;
+            }
+            if ($('#ddlGetThanaName').val() == "0") {
+                swal("Please Select Thana.");
+                event.preventDefault();
+                return false;
+            }
+
+            if ($('#ddlCircleType').val() == "" && $('#ddlSectorType').val() == "") {
+                swal("Please Select atleast one Circle/Sector.");
+                event.preventDefault();
+                return false;
+            }
+
+            //if ($('#ddlSectorType').val() == "") {
+            //    swal("Please Select Sector.");
+            //    event.preventDefault();
+            //    return false;
+            //}
+
+            if ($('#ddlAreaType').val() == "") {
+                swal("Please Select Area.");
+                event.preventDefault();
+                return false;
+            }
+
+
+            if ($('#txt_LicenseFee').val() == "" && $('#txt_MGQ').val() == undefined) {
+                swal("Please Enter the License Fee Amount.");
+                event.preventDefault();
+                return false;
+            }
+
+            if ($('#txt_MGQ').val() == "" && $('#txt_LicenseFee').val() == undefined) {
+                swal("Please Enter the MGQ Amount.");
+                event.preventDefault();
+                return false;
+            }
+
+            if ($('#ShopNameHin').val() == "") {
+                swal("Please fill the Hindi Name of Shop.");
+                event.preventDefault();
+                return false;
+            }
+
+
+            if ($('#ShopNameEng').val() == "") {
+                swal("Please fill the English Name of Shop.");
+                event.preventDefault();
+                return false;
+            }
+
+
+            if (!(window.confirm("सुरक्षित करने से पूर्व दुकान से सम्बंधित समस्त सूचनाओ की शुद्धता की जांच कर ली गयी है |"))) {
+                event.preventDefault();
+                return false;
+            }
+
+            //if()
+            //var regex = new RegExp("^[a-zA-Z0-9 ]+$");
+            //var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            //if (regex.test(str)) {
+            //    return true;
+            //}
+
+            //e.preventDefault();
+            //return false;
+
+
+        }
+
+
+
+
+
+
+    </script>*@
+
+
+
